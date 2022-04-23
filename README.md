@@ -10,7 +10,7 @@ Jishacum is a debugging and testing container for [discordrb](https://github.com
 ### jsc debug | dbg [command] [*args]
 > Debug a command.
 ### jsc eval | e [code]
-> Evaluate a code. You can see the shortcut variables  in `EVAL_SHORTCUTS` file.
+> Evaluate a code. You can see the shortcut variables in the [`EVAL_SHORTCUTS`](https://github.com/danrfq/jishacum/blob/main/EVAL_SHORTCUTS.md) file.
 ### jsc exec [member_id] [command] [*args]
 > Execute a command as someone else.
 ### jsc repeat | rpt [number] [command] [*args]
@@ -32,7 +32,7 @@ Obviously, you must have a ready [discordrb](https://github.com/shardlab/discord
 2. `$ cd jishacum`
 3. `$ bundle install`
 
-After installing the bundle, you must set `OWNER_ID` or `OWNER_IDS` (if your bot is owned by a team) in the config file. Otherwise, jishacum will not run.
+After installing the bundle, you must set `OWNER_ID` or `OWNER_IDS` (if your bot is owned by a team) in the [config](https://github.com/danrfq/jishacum/blob/main/jishacum/config.rb) file. Otherwise, jishacum will not run.
 
 ```ruby
 # before 
@@ -54,22 +54,22 @@ After installing the bundle, you must set `OWNER_ID` or `OWNER_IDS` (if your bot
 "OWNER_IDS" => [211756205721255947, 903702557942243359],
 ```
 
-You may also need to change the `MAIN_BOT_FILE_NAME` variable if your main bot's file name is not `bot.rb.
+You may also need to change the `MAIN_BOT_FILE_NAME` variable if your main bot's file name is not `bot.rb`.
 
-# Include jishacum container to your bot
+# Include Jishacum Container to Your Bot
 
 It's really simple, you just need to require jishacum container:
 ```ruby
 require_relative "jishacum/jishacum"
 ```
- and, include it to your bot:
+and, include it to your bot:
 ```ruby
 bot.include! Jishacum
 ```
 That's it! Now you have jishacum container included in your bot.
 
-A simple bot example using the jishacum container is in the bot file.
+A simple bot example using the jishacum container is in the [bot](https://github.com/danrfq/jishacum/blob/main/bot.rb) file.
 
-# Support or questions
+# Support or Questions
 
 You can ask questions in [this Discord server](https://discord.gg/rtUWkwDxHP) in the `#support` channel, or you can send me a DM in Discord: `will.#0021`.

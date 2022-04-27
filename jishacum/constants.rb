@@ -16,7 +16,8 @@ RELATIVES = [
     "config",
     "errors",
     "helper",
-    "middleware"
+    "middleware",
+    "paginator"
 ]
 
 EXTERNALS = [

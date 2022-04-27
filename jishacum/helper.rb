@@ -1,6 +1,43 @@
 require "discordrb"
 require_relative "config"
 
+def fnum(num_string)
+    num_string.to_s.reverse.scan(/\d{3}|.+/).join(",").reverse
+end
+
+def split_message(event, message, prefix = nil, suffix = nil)
+    prefix = prefix ? prefix.to_s : nil
+    suffix = suffix ? suffix.to_s : nil
+    if prefix && suffix
+        pre, suf = prefix.length, suffix.length
+        if (message.length + pre + suf) <= 2000
+            return [pre + message + suf]
+        else
+            return message.chars.each_slice(2000-pre-suf).map(&:join).map {|s| prefix+s+suffix}.map {|s| s.gsub(event.bot.token, "[TOKEN REDACTED]")}
+        end
+    elsif prefix && !suffix
+        pre = prefix.length
+        if (message.length + pre) <= 2000
+            return [pre + message]
+        else
+            return message.chars.each_slice(2000-pre).map(&:join).map {|s| prefix+s}.map {|s| s.gsub(event.bot.token, "[TOKEN REDACTED]")}
+        end
+    elsif !prefix && suffix
+        suf = suffix.length
+        if (message.length + suf) <= 2000
+            return [message + suf]
+        else
+            return message.chars.each_slice(2000-pre).map(&:join).map {|s| s+suffix}.map {|s| s.gsub(event.bot.token, "[TOKEN REDACTED]")}
+        end
+    else
+        if message.length <= 2000
+            return [message]
+        else
+            return message.chars.each_slice(2000).map(&:join).map {|s| s.gsub(event.bot.token, "[TOKEN REDACTED]")}
+        end
+    end
+end
+
 def owner(event)
     return JISHACUM_CONFIG["OWNER_IDS"].include?(event.author.id) || event.author.id == JISHACUM_CONFIG["OWNER_ID"]
 end
@@ -14,16 +51,17 @@ def Embed(title = nil, description = nil, color = 15844367, url = nil)
     return em
 end
 
+def send_view(ev, con, com)
+    ev.respond(con, false, nil, nil, nil, nil, com)
+end
+
 def r(event, text) # return function in jsc eval command
     if text == nil
         event.respond("nil")
         return
     end
     if text.to_s.length > 2000
-        splitted = Discordrb::split_message(text.to_s)
-        splitted.each do |final|
-            event.respond(final.gsub(event.bot.token, "[TOKEN REDACTED]"))
-        end
+        JishacumPaginator.start(event, split_message(event, text))
     else
         if text.class == Discordrb::Member
             event.respond(text.distinct)
@@ -56,3 +94,4 @@ def reply(event, content = nil, embed = nil, ping = false) # reply function
         event.send(content, false, embed, nil, nil, event.message, nil)
     end
 end
+

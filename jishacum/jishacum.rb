@@ -15,6 +15,7 @@ module Jishacum
     extend Discordrb::Commands::CommandContainer
     using DMBlockMiddleware if JISHACUM_CONFIG["IGNORE_DMS"]
     using MessageModifierMiddleware
+    include! JishacumPaginator
 
     def start_debug(event)
         message = event.message
@@ -130,10 +131,7 @@ module Jishacum
                     if e.methods.include?(:original_message)
                         if !e.original_message.include?("undefined method ")
                             if e.original_message.length > 4000
-                                splitted = Discordrb::split_message(e.full_message)
-                                splitted.each do |text|
-                                    event.respond("```\n#{text}\n```")
-                                end
+                                JishacumPaginator.start(event, split_message(event, e.original_message, "```\n", "\n```"))
                             else
                                 event.respond("```\n#{e.class.name}: #{e.full_message.gsub("`#{e.name}'", "`#{e.name}`")}\n```")
                             end
@@ -157,7 +155,7 @@ module Jishacum
             if code.start_with?("```rb\n") && code.end_with?("\n```")
                 code = code[0..-4].sub("```rb\n", "")
             elsif code.start_with?("```ruby\n") && code.end_with?("\n```")
-                code = code[0..-4].sub("\n```")
+                code = code[0..-4].sub("```ruby\n", "")
             end
             
             req = {
@@ -271,10 +269,7 @@ module Jishacum
                     if e.methods.include?(:original_message)
                         if !e.original_message.include?("undefined method ")
                             if e.original_message.length > 4000
-                                splitted = Discordrb::split_message(e.full_message)
-                                splitted.each do |text|
-                                    event.respond("```\n#{text}\n```")
-                                end
+                                JishacumPaginator.start(event, split_message(event, e.original_message, "```\n", "\n```"))
                             else
                                 event.respond("```\n#{e.class.name}: #{e.full_message.gsub("`#{e.name}'", "`#{e.name}`")}\n```")
                             end
@@ -369,24 +364,24 @@ $ #{cmd}
         presences_intent = bot.gateway.intents & Discordrb::INTENTS[:server_presences] > 0 ? "Presences intent is enabled" : "Presences intent is not enabled"
         members_intent = bot.gateway.intents & Discordrb::INTENTS[:server_members] > 0 ? "members intent is enabled" : "members intent is not enabled"
         if bot.shard_key
-            shard_info = "The bot is sharded with #{bot.shard_key[0]} total shards"
+            shard_info = "this bot is sharded with `#{bot.shard_key[0]}` total shards"
         else
-            shard_info = "The bot is not sharded"
+            shard_info = "this bot is not sharded"
         end
         if !arg
             desc = %{discordrb `v#{Discordrb::VERSION}`, `#{RUBY_DESCRIPTION}`
 
 This bot is online since <t:#{uptime["time"]}:R> and #{shard_info}.
     
-This bot is in `#{bot.servers.length}` servers and The bot can see `#{bot.users.length}` users.
+This bot is in `#{fnum(bot.servers.length)}` servers and this bot can see `#{fnum(bot.users.length)}` users.
 
-This bot is running #{bot.event_threads.length} event thread#{bot.event_threads.length > 1 ? "s" : ""}.
+This bot is running `#{bot.event_threads.length}` event thread#{bot.event_threads.length > 1 ? "s" : ""}.
 
-This bot has #{!bot.awaits.empty? ? bot.awaits.length : "no"} registered awaits and #{!bot.voices.empty? ? bot.voices.length : "no"} voice connections.
+This bot has #{!bot.awaits.empty? ? "`#{bot.awaits.length}`" : "no"} registered awaits and #{!bot.voices.empty? ? "`#{bot.voices.length}`" : "no"} voice connections.
 
 #{presences_intent} and #{members_intent}.
 
-This process is running on PID #{Process.pid} and used #{mem.mb.round(1)} MB of memory.
+This process is running on PID `#{Process.pid}` and used #{mem.mb.round(1)} MB of memory.
         }
             embed = Embed("jishacum v0.1", desc, JISHACUM_CONFIG["EMBED_HEX_COLOR"])
             embed.thumbnail = Discordrb::Webhooks::EmbedThumbnail.new(url: "https://cdn.discordapp.com/emojis/315242245274075157.webp?size=1024")

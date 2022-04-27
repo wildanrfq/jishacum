@@ -27,7 +27,7 @@ def split_message(event, message, prefix = nil, suffix = nil)
         if (message.length + suf) <= 2000
             return [message + suf]
         else
-            return message.chars.each_slice(2000-pre).map(&:join).map {|s| s+suffix}.map {|s| s.gsub(event.bot.token, "[TOKEN REDACTED]")}
+            return message.chars.each_slice(2000-suf).map(&:join).map {|s| s+suffix}.map {|s| s.gsub(event.bot.token, "[TOKEN REDACTED]")}
         end
     else
         if message.length <= 2000
@@ -78,10 +78,7 @@ end
 def r_cat(event, text)
     event.respond("File is empty.") if !text
     if text.to_s.length > 2000
-        splitted = Discordrb::split_message(text.to_s)
-        splitted.each do |final|
-            event.respond("```rb\n#{final}\n```")
-        end
+        JishacumPaginator.start(event, split_message(event, text, "```rb\n", "\n```"))
     else
         event.respond("```rb\n#{text.to_s}\n```")
     end

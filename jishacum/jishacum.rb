@@ -6,8 +6,8 @@ RELATIVES.each do |_rlt| require_relative _rlt end
 include JishacumConfig
 include JishacumMiddleware
 
-raise JishacumError::InvalidOwnerID if !((JISHACUM_CONFIG["OWNER_ID"].class == Integer) && (17..20).include?(JISHACUM_CONFIG["OWNER_ID"].to_s.length))
 raise JishacumError::OwnerIDNotDefined if !JISHACUM_CONFIG["OWNER_ID"] && JISHACUM_CONFIG["OWNER_IDS"].empty?
+raise JishacumError::InvalidOwnerID if !((JISHACUM_CONFIG["OWNER_ID"].class == Integer) && (17..20).include?(JISHACUM_CONFIG["OWNER_ID"].to_s.length))
 raise JishacumError::InconsistentOwnerVariables if JISHACUM_CONFIG["OWNER_ID"] && !JISHACUM_CONFIG["OWNER_IDS"].empty?
 
 module Jishacum

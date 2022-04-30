@@ -114,9 +114,9 @@ module Jishacum
                 if code.end_with?("end;")
                     code = code[0..-2]
                 end
-
+                
                 if !code.end_with?("end")
-                    if !code.include?("r event,") && !code.include?("r ev,") && !code.include?("reply event,") && !code.include?("reply ev,")
+                    if ["r ev,", "r event,", "reply ev,", "reply event,"].any? {!code.include?(_1)}
                         if code.include?(";")
                             lines = code.split(";")
                             lines[-1] = "r event, " + lines[-1]
@@ -128,7 +128,7 @@ module Jishacum
                     end
                 end
 
-                result = eval code
+                eval code
                 event.message.react("\u2705")
             rescue Exception => e
                 event.message.react("\u274c")

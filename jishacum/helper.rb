@@ -56,9 +56,13 @@ def send_view(ev, con, com)
 end
 
 def r(event, text) # return function in jsc eval command
-    if text == nil
-        event.respond("nil")
-        return
+    if !text
+        if ["ev<<", "ev<< ", "ev << ", "ev <<"].any? {event.message.content.include?(_1)}
+            return
+        else
+            event.respond("nil")
+            return
+        end
     end
     if text.to_s.length > 2000
         JishacumPaginator.start(event, split_message(event, text))

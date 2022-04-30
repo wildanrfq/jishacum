@@ -111,14 +111,20 @@ module Jishacum
             end
 
             begin
-                if !code.include?("r event,") && !code.include?("r ev,") && !code.include?("reply event,") && !code.include?("reply ev,")
-                    if code.include?(";")
-                        lines = code.split(";")
-                        lines[-1] = "r event, " + lines[-1]
+                if code.end_with?("end;")
+                    code = code[0..-2]
+                end
 
-                        code = lines.join(";")
-                    else
-                        code = "r event, " + code
+                if !code.end_with?("end")
+                    if !code.include?("r event,") && !code.include?("r ev,") && !code.include?("reply event,") && !code.include?("reply ev,")
+                        if code.include?(";")
+                            lines = code.split(";")
+                            lines[-1] = "r event, " + lines[-1]
+
+                            code = lines.join(";")
+                        else
+                            code = "r event, " + code
+                        end
                     end
                 end
 
@@ -139,10 +145,18 @@ module Jishacum
                             event.respond("```\n#{e.original_message.split(" @should")[0]}\n```")
                         end
                     else
-                        event.respond("```\n#{e.full_message}\n```")
+                        if e.full_message.length > 4000
+                            JishacumPaginator.start(event, split_message(event, e.full_message, "```\n", "\n```"))
+                        else
+                            event.respond("```\n#{e.full_message}\n```")
+                        end
                     end
                 else
-                    event.respond("```\n#{e.full_message}\n```")
+                    if e.full_message.length > 4000
+                        JishacumPaginator.start(event, split_message(event, e.full_message, "```\n", "\n```"))
+                    else
+                        event.respond("```\n#{e.full_message}\n```")
+                    end
                 end
             end
 
@@ -277,10 +291,18 @@ module Jishacum
                             event.respond("```\n#{e.original_message.split(" @should")[0]}\n```")
                         end
                     else
-                        event.respond("```\n#{e.full_message}\n```")
+                        if e.full_message.length > 4000
+                            JishacumPaginator.start(event, split_message(event, e.full_message, "```\n", "\n```"))
+                        else
+                            event.respond("```\n#{e.full_message}\n```")
+                        end
                     end
                 else
-                    event.respond("```\n#{e.full_message}\n```")
+                    if e.full_message.length > 4000
+                        JishacumPaginator.start(event, split_message(event, e.full_message, "```\n", "\n```"))
+                    else
+                        event.respond("```\n#{e.full_message}\n```")
+                    end
                 end
             end
 

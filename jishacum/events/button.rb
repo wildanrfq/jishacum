@@ -25,9 +25,7 @@ module ButtonEvent
             next
         end
         
-        begin
-            event.defer_update
-        rescue; end
+        event.defer_update
         
         if id.start_with?("first")
             view = Discordrb::Components::View.new do |v|

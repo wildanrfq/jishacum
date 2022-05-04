@@ -65,7 +65,7 @@ def r(event, text) # return function in jsc eval command
         end
     end
     if text.to_s.length > 2000
-        JishacumPaginator.start(event, split_message(event, text))
+        JishacumPaginator.start(event, split_message(event, text.to_s))
     else
         if text.class == Discordrb::Member
             event.respond(text.distinct)

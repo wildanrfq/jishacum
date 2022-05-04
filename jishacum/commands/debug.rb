@@ -1,5 +1,6 @@
 require "discordrb"
 require "benchmark"
+
 require_relative "../helper"
 
 module DebugCommand

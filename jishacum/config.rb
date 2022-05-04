@@ -1,6 +1,6 @@
 module JishacumConfig
     JISHACUM_CONFIG = {
-        "OWNER_ID" => 171764626755813376,
+        "OWNER_ID" => nil,
         "OWNER_IDS" => [],
         "MAIN_BOT_FILE_NAME" => "bot.rb",
         "IGNORE_DMS" => true,

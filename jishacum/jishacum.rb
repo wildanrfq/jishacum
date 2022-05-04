@@ -1,6 +1,10 @@
 require "discordrb"
+
 require_relative "middleware"
+require_relative "errors"
+
 Dir.entries("jishacum/commands")[2..-1].each {require_relative "commands/"+_1}
+Dir.entries("jishacum/events")[2..-1].each {require_relative "events/"+_1}
 
 include JishacumConfig
 
@@ -14,7 +18,9 @@ module Jishacum
 
     using DMBlockMiddleware if JISHACUM_CONFIG["IGNORE_DMS"]
 
-    COMMAND_MODULES = [
+    MODULES = [
+        ButtonEvent,
+        ReadyEvent,
         CatCommand,
         DebugCommand,
         EvalCommand,
@@ -25,6 +31,6 @@ module Jishacum
         ShellCommand
     ]
     
-    COMMAND_MODULES.each {include! _1}
+    MODULES.each {include! _1}
 
 end

@@ -1,6 +1,7 @@
 require "discordrb"
 require "http"
 require "open3"
+
 require_relative "../helper"
 
 module ShellCommand

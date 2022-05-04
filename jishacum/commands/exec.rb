@@ -1,4 +1,5 @@
 require "discordrb"
+
 require_relative "../middleware"
 require_relative "../helper"
 

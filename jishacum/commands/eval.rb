@@ -1,4 +1,5 @@
 require "discordrb"
+
 require_relative "../helper"
 require_relative "../paginator"
 

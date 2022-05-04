@@ -1,7 +1,6 @@
 require "discordrb"
 require "get_process_mem"
 
-require_relative "../config"
 require_relative "../helper"
 
 include JishacumConfig
@@ -21,40 +20,7 @@ Commands:
 }
 
 module MainCommand
-    extend Discordrb::EventContainer
     extend Discordrb::Commands::CommandContainer
-
-    uptime = {time: 0}
-
-    ready do |event|
-        if JISHACUM_CONFIG["OWNER_ID"]
-            Discordrb::API::User.resolve(event.bot.token, JISHACUM_CONFIG["OWNER_ID"]) rescue raise JishacumError::InvalidOwnerID
-        elsif !JISHACUM_CONFIG["OWNER_IDS"].empty?
-            JISHACUM_CONFIG["OWNER_IDS"].each do |id|
-                Discordrb::API::User.resolve(event.bot.token, id) rescue raise JishacumError::InvalidOwnerID
-            end
-        end
-
-        restz = File.open "jishacum/restart.json"
-        data = JSON.load restz
-
-        if data["msg"]
-            secs = Time.now - Time.parse(data["time"])
-            secs = secs.to_s.split(".")[0]
-            msg = event.bot.channel(data["ch"]).message(data["msg"])
-            msg.edit("Successfully restarted #{event.bot.bot_user.name}, took `#{secs}` seconds to restart.")
-            data = {
-                "ch" => nil,
-                "msg" => nil,
-                "time" => nil
-            }
-            File.write("jishacum/restart.json", JSON.pretty_generate(data))
-        end
-
-        uptime["time"] = Time.at(Process.clock_gettime(Process::CLOCK_REALTIME)).to_i
-
-        puts "#{event.bot.profile.distinct} - discordrb successfully logged in. (jishacum)"
-    end
 
     command(:jishacum, aliases: [:jsc], description: JISHACUM_HELP_DESCRIPTION) do |event, arg|
         break unless owner event
@@ -69,9 +35,10 @@ module MainCommand
             shard_info = "this bot is not sharded"
         end
         if !arg
+            uptime = File.open("jishacum/data/uptime.json")
             desc = %{discordrb `v#{Discordrb::VERSION}`, `#{RUBY_DESCRIPTION}`
 
-This bot is online since <t:#{uptime["time"]}:R> and #{shard_info}.
+This bot is online since <t:#{JSON.load(uptime)["uptime"]}:R> and #{shard_info}.
     
 This bot is in `#{fnum(bot.servers.length)}` servers and this bot can see `#{fnum(bot.users.length)}` users.
 
@@ -88,6 +55,8 @@ This process is running on PID `#{Process.pid}` and used #{mem.mb.round(1)} MB o
             embed.footer = Discordrb::Webhooks::EmbedFooter.new(text: bot.profile.distinct)
             embed.timestamp = Time.now.utc
             event.respond(nil, nil, embed)
+
+            uptime.close
         elsif ["shutdown", "exit"].include?(arg)
             reply event, "Exited."
             exit
@@ -102,7 +71,7 @@ This process is running on PID `#{Process.pid}` and used #{mem.mb.round(1)} MB o
                 "time" => Time.now
             }
 
-            File.write("jishacum/restart.json", JSON.pretty_generate(data))
+            File.write("jishacum/data/restart.json", JSON.pretty_generate(data))
 
             exec("bundle exec ruby #{JISHACUM_CONFIG["MAIN_BOT_FILE_NAME"]}")
         end

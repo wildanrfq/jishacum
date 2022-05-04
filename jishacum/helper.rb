@@ -1,8 +1,15 @@
 require "discordrb"
+
 require_relative "config"
 
 def fnum(num_string)
     num_string.to_s.reverse.scan(/\d{3}|.+/).join(",").reverse
+end
+
+def page_control(arr, page)
+    embed = Embed(nil, arr[page])
+    embed.footer = Discordrb::Webhooks::EmbedFooter.new(text: "Page #{page+1}/#{arr.length}")
+    return embed
 end
 
 def split_message(event, message, prefix = nil, suffix = nil)

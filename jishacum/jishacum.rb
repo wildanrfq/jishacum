@@ -3,8 +3,13 @@ require "discordrb"
 require_relative "middleware"
 require_relative "errors"
 
-Dir.entries("jishacum/commands")[2..-1].each {require_relative "commands/"+_1}
-Dir.entries("jishacum/events")[2..-1].each {require_relative "events/"+_1}
+COMMAND_MODULES = Dir.entries("jishacum/commands")
+EVENT_MODULES = Dir.entries("jishacum/events")
+
+[".", ".."].each {COMMAND_MODULES.delete(_1); EVENT_MODULES.delete(_1)}
+
+COMMAND_MODULES.each {require_relative "commands/"+_1}
+EVENT_MODULES.each {require_relative "events/"+_1}
 
 include JishacumConfig
 

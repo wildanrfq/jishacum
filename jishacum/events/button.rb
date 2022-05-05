@@ -39,7 +39,7 @@ module ButtonEvent
             end
 
             event.edit_response(content: nil,embeds: [page_control(data[:arr], 0)], allowed_mentions: nil, components: view)  rescue nil
-            LIVE_PAGINATORS[event.message.id] = {author: event.user.id, arr: data[:arr], deferred: true, page: 0,}
+            LIVE_PAGINATORS[event.message.id] = {author: event.user.id, arr: data[:arr], page: 0}
         elsif id.start_with?("prev")
             dis = data[:page] == 0 ? true : false
             view = Discordrb::Components::View.new do |v|
@@ -53,7 +53,7 @@ module ButtonEvent
             end
 
             event.edit_response(content: nil,embeds: [page_control(data[:arr], data[:page]-1)], allowed_mentions: nil, components: view) rescue nil
-            LIVE_PAGINATORS[event.message.id] = {author: event.user.id, arr: data[:arr], deferred: true, page: data[:page]-1}
+            LIVE_PAGINATORS[event.message.id] = {author: event.user.id, arr: data[:arr], page: data[:page]-1}
         elsif id.start_with?("next")
             dis = data[:page]+1 == data[:arr].length-1 ? true : false
             view = Discordrb::Components::View.new do |v|
@@ -67,7 +67,7 @@ module ButtonEvent
             end
 
             event.edit_response(content: nil,embeds: [page_control(data[:arr], data[:page]+1)], allowed_mentions: nil, components: view) rescue nil
-            LIVE_PAGINATORS[event.message.id] = {author: event.user.id, arr: data[:arr], deferred: true, page: data[:page]+1}
+            LIVE_PAGINATORS[event.message.id] = {author: event.user.id, arr: data[:arr], page: data[:page]+1}
         elsif id.start_with?("last")
             view = Discordrb::Components::View.new do |v|
                 v.row do |r|
@@ -80,7 +80,7 @@ module ButtonEvent
             end
             
             event.edit_response(content: nil,embeds: [page_control(data[:arr], data[:arr].length-1)], allowed_mentions: nil, components: view) rescue nil
-            LIVE_PAGINATORS[event.message.id] = {author: event.user.id, arr: data[:arr], deferred: true, page: data[:arr].length-1}
+            LIVE_PAGINATORS[event.message.id] = {author: event.user.id, arr: data[:arr], page: data[:arr].length-1}
         elsif id.start_with?("stop")
             LIVE_PAGINATORS.delete(event.message.id)
             event.channel.message(event.message.id).delete

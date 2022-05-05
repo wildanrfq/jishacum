@@ -6,8 +6,8 @@ def fnum(num_string)
     num_string.to_s.reverse.scan(/\d{3}|.+/).join(",").reverse
 end
 
-def page_control(arr, page)
-    embed = Embed(nil, arr[page])
+def page_control(arr, page, error = false)
+    embed = error ? Embed(nil, arr[page], 16711680) : Embed(nil, arr[page])
     embed.footer = Discordrb::Webhooks::EmbedFooter.new(text: "Page #{page+1}/#{arr.length}")
     return embed
 end

@@ -6,7 +6,7 @@ module JishacumPaginator
 
     LIVE_PAGINATORS = {}
 
-    def start(event, arr)
+    def start(event, arr, err = false)
         view = Discordrb::Components::View.new do |v|
             v.row do |r|
                 r.button(style: 2, emoji: "\u23ee", custom_id: "first#{event.message.id}", disabled: true)
@@ -17,7 +17,7 @@ module JishacumPaginator
             end
         end
         LIVE_PAGINATORS[event.message.id] = {author: event.user.id, arr: arr, page: 0, deferred: false}
-        event.send_embed('', page_control(arr, 0), nil, false, nil, nil, view)
+        event.send_embed('', page_control(arr, 0, err), nil, false, nil, nil, view)
     end
 
     module_function :start

@@ -82,6 +82,7 @@ module ButtonEvent
             event.edit_response(content: nil,embeds: [page_control(data[:arr], data[:arr].length-1)], allowed_mentions: nil, components: view) rescue nil
             LIVE_PAGINATORS[event.message.id] = {author: event.user.id, arr: data[:arr], deferred: true, page: data[:arr].length-1}
         elsif id.start_with?("stop")
+            LIVE_PAGINATORS.delete(event.message.id)
             event.channel.message(event.message.id).delete
         end
     end

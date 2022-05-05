@@ -1,6 +1,10 @@
 # Jishacum
 
-Jishacum is a debugging and testing container for [discordrb](https://github.com/shardlab/discordrb) bots. Jishacum is heavily inspired by [Jishaku](https://github.com/Gorialis/jishaku) (a debugging and testing cog for [discord.py](https://github.com/Rapptz/discord.py) bots). Jishacum is aliased as `jsc`.
+Jishacum is a debugging and testing container for [discordrb](https://github.com/shardlab/discordrb) bots.
+
+Jishacum is heavily inspired by [Jishaku](https://github.com/Gorialis/jishaku) (a debugging and testing cog for [discord.py](https://github.com/Rapptz/discord.py) bots).
+
+Jishacum is aliased as `jsc`.
 
 ![Jishacum Features Preview](https://cdn.discordapp.com/attachments/900443909677797396/967063480144367707/unknown.png)
 # Features

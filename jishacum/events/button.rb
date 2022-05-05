@@ -14,6 +14,7 @@ module ButtonEvent
         LIVE_PAGINATORS.each do |k, v|
             if id.end_with? k.to_s
                 data = v
+                data.merge!(msg: k)
                 break
             end
         end
@@ -82,7 +83,7 @@ module ButtonEvent
             event.edit_response(content: nil,embeds: [page_control(data[:arr], data[:arr].length-1)], allowed_mentions: nil, components: view) rescue nil
             LIVE_PAGINATORS[event.message.id] = {author: event.user.id, arr: data[:arr], page: data[:arr].length-1}
         elsif id.start_with?("stop")
-            LIVE_PAGINATORS.delete(event.message.id)
+            LIVE_PAGINATORS.delete(data[:msg])
             event.channel.message(event.message.id).delete
         end
     end

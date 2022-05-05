@@ -78,7 +78,7 @@ def r(event, text) # return function in jsc eval command
             event.respond(text.distinct)
         elsif text.class == Discordrb::Webhooks::Embed
             event.respond(nil, nil, text)
-        elsif text.class == Discordrb::Message || (text.class == Hash && %i[author arr page].each {text.keys.include? _1})
+        elsif text.class == Discordrb::Message
             return
         else
             event.respond(text.to_s.gsub(event.bot.token, "[TOKEN REDACTED]"))

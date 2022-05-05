@@ -16,8 +16,8 @@ module JishacumPaginator
                 r.button(style: 2, emoji: "\u23ed", custom_id: "last#{event.message.id}")
             end
         end
-        result = event.send_embed('', page_control(arr, 0, err), nil, false, nil, nil, view)
-        LIVE_PAGINATORS[result.id] = {author: event.user.id, arr: arr, page: 0}
+        LIVE_PAGINATORS[event.message.id] = {author: event.user.id, arr: arr, page: 0}
+        event.send_embed('', page_control(arr, 0, err), nil, false, nil, nil, view)
     end
 
     module_function :start

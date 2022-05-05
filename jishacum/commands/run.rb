@@ -13,7 +13,7 @@ module RunCommand
             # usage: !jsc run <code> || e.g !jsc run puts "hello"
             break unless owner event
 
-            channel.start_typing
+            event.channel.start_typing
             code = message.content.sub(prefix+"jsc run ", "").sub(prefix+"jsc run\n", "")
 
             if code.start_with?("```rb\n") && code.end_with?("\n```")

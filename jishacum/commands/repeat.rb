@@ -1,11 +1,15 @@
 require "discordrb"
 
 require_relative "../helper"
+require_relative "../middleware"
 require_relative "../paginator"
+
+include JishacumMiddleware
 
 module RepeatCommand
     extend Discordrb::EventContainer
     include! JishacumPaginator
+    using MessageModifierMiddleware
 
     message do |event|
         message = event.message

@@ -14,6 +14,7 @@ module RepeatCommand
     message do |event|
         message = event.message
         prefix = event.bot.prefix
+        bot = event.bot
         global_commands = event.bot.commands.keys.map(&:to_s)
         actual_commands = ["jsc exit", "jsc x", "jsc r", "jsc restart", "jsc shutdown"]
         message_commands = ["jsc e", "jsc cat", "jsc eval", "jsc dbg", "jsc debug", "jsc rpt", "jsc repeat", "jsc run", "jsc exec", "jsc sh", "jsc shell"]

@@ -12,6 +12,7 @@ module ExecCommand
     message do |event|
         message = event.message
         prefix = event.bot.prefix
+        bot = event.bot
 
         if message.content.start_with?(prefix+"jsc exec ")
             # usage: !jsc exec <user_id> <command_name> *args

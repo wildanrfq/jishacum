@@ -2,10 +2,14 @@ require "discordrb"
 require "benchmark"
 
 require_relative "../helper"
+require_relative "../middleware"
+
+include JishacumMiddleware
 
 module DebugCommand
     extend Discordrb::EventContainer
-
+    using MessageModifierMiddleware
+    
     def start_debug(event)
         message = event.message
         bot = event.bot

@@ -89,7 +89,7 @@ module RepeatCommand
                 if !e.to_s.start_with?("Discordrb")
                     if e.methods.include?(:original_message)
                         if !e.original_message.include?("undefined method ")
-                            if e.original_message.length > 4000
+                            if e.original_message.length > 2000
                                 JishacumPaginator.start(event, split_message(event, e.original_message, "```\n", "\n```"))
                             else
                                 event.respond("```\n#{e.class.name}: #{e.full_message.gsub("`#{e.name}'", "`#{e.name}`")}\n```")
@@ -98,14 +98,14 @@ module RepeatCommand
                             event.respond("```\n#{e.original_message.split(" @should")[0]}\n```")
                         end
                     else
-                        if e.full_message.length > 4000
+                        if e.full_message.length > 2000
                             JishacumPaginator.start(event, split_message(event, e.full_message, "```\n", "\n```"))
                         else
                             event.respond("```\n#{e.full_message}\n```")
                         end
                     end
                 else
-                    if e.full_message.length > 4000
+                    if e.full_message.length > 2000
                         JishacumPaginator.start(event, split_message(event, e.full_message, "```\n", "\n```"))
                     else
                         event.respond("```\n#{e.full_message}\n```")

@@ -6,7 +6,7 @@ Jishacum is heavily inspired by [Jishaku](https://github.com/Gorialis/jishaku) (
 
 Jishacum is aliased as `jsc`.
 
-![Jishacum Features Preview](https://cdn.discordapp.com/attachments/900443909677797396/967063480144367707/unknown.png)
+![Jishacum Features Preview](https://gcdnb.pbrd.co/images/WuRqrNkhxGHG.png?o=1)
 # Features
 
 ### jishacum | jsc
